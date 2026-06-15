@@ -28,7 +28,7 @@ export function render({
   const modelTag = showModel ? ` | 🐳 ${model}` : ""
   const barStr = renderProgressBar(contextPercent, contextTokens, contextTotal)
   const line1 = `💰 ${color}${symbol}${currentBalance}${colors.reset} | 💸 ${colors.cyan}${symbol}${spent.toFixed(2)}${colors.reset} (Since ${since})${modelTag} ${barStr}`
-  const line2 = cwd ? `\n${colors.dim}📂 ${cwd}${colors.reset}` : ""
+  const line2 = cwd ? `\n${colors.dim}📂 ${cwd}${colors.reset} ${colors.green}XNOW${colors.reset}` : ""
   return `${line1}${line2}`
 }
 
