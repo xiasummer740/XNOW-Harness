@@ -153,24 +153,34 @@ def get_usage_summary(api_key: str = "") -> Optional[dict]:
     return balance
 
 
+def _is_gbk() -> bool:
+    """检测当前终端是否为 GBK 编码（Windows 中文）"""
+    try:
+        import sys
+        return sys.stdout.encoding and sys.stdout.encoding.lower() in ("gbk", "gb2312", "cp936")
+    except Exception:
+        return False
+
+
 def format_full_status(balance: Optional[dict], model: str = "") -> str:
     """格式化为完整状态信息（含余额、消耗、模型）"""
+    ascii_mode = _is_gbk()
+
     if not balance:
-        return "💰 余额查询失败"
+        return "[Balance: query failed]" if ascii_mode else "💰 余额查询失败"
 
     total = balance.get("total", 0)
     spent = balance.get("spent", 0)
     since = balance.get("since", "?")
 
-    # 余额颜色
     if total < 1:
-        balance_icon = "🔴"
+        icon = "🔴"
     elif total < 6:
-        balance_icon = "🟡"
+        icon = "🟡"
     else:
-        balance_icon = "💰"
+        icon = "💰"
 
-    parts = [f"{balance_icon} ¥{total:.2f}"]
+    parts = [f"{icon} ¥{total:.2f}"]
     if spent > 0:
         parts.append(f"💸 ¥{spent:.2f} (Since {since})")
     if model:

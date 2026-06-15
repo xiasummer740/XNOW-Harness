@@ -30,10 +30,12 @@ def main():
         return
 
     if args.command == "balance":
+        import sys
         from .utils.balance import get_usage_summary, format_full_status
         b = get_usage_summary()
         if b:
-            print(format_full_status(b))
+            text = format_full_status(b)
+            sys.stdout.buffer.write((text + "\n").encode("utf-8"))
         else:
             show_error("余额查询失败（检查 API Key）")
         return
