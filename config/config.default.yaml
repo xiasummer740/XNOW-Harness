@@ -1,0 +1,6 @@
+# XNOW-Harness 配置
+# 复制为 config.yaml 可覆盖默认值
+
+# ─── 显示 ───
+display:
+  language: zh

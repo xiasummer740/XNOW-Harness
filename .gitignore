@@ -1,0 +1,11 @@
+# XNOW-Harness
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+config/config.yaml
+.xnow.yaml

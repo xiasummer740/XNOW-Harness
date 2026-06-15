@@ -1,0 +1,4 @@
+# XNOW-Harness 依赖
+rich>=13.0.0          # 终端显示
+httpx>=0.27.0         # HTTP 客户端（余额查询）
+pyyaml>=6.0           # 配置解析

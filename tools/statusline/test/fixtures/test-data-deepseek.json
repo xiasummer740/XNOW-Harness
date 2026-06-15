@@ -1,0 +1,17 @@
+{
+  "model": {
+    "display_name": "DeepSeek-V4-Flash[1m]"
+  },
+  "context_window": {
+    "used": 3456,
+    "total": 10000
+  },
+  "cost": {
+    "total_cost_usd": 0.0456
+  },
+  "rate_limits": {
+    "five_hour": {
+      "used_percentage": 12.5
+    }
+  }
+}

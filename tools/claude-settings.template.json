@@ -1,0 +1,36 @@
+{
+  "说明": "这是祥哥的 Claude Code 配置模板",
+  "用途": "重装 Claude Code 后，将此文件内容复制到 ~/.claude/settings.json",
+  "注意": "API 密钥由 CC Switch 管理，此文件不包含实际密钥",
+  "恢复步骤": "复制到 ~/.claude/settings.json，然后 'source ~/.bashrc' 或重启终端",
+
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "",
+    "ANTHROPIC_BASE_URL": "https://api.deepseek.com/anthropic",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "deepseek-v4-flash",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL_NAME": "deepseek-v4-flash",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "deepseek-v4-pro",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL_NAME": "deepseek-v4-pro",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "deepseek-v4-pro",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL_NAME": "deepseek-v4-pro",
+    "ANTHROPIC_MODEL": "deepseek-v4-flash",
+    "DEEP_SEEK_API_KEY_FOR_BALANCE": "",
+    "DEEPSEEK_API_KEY": ""
+  },
+
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-Process *)",
+      "PowerShell(Test-Path *)"
+    ]
+  },
+
+  "statusLine": {
+    "type": "command",
+    "command": "node C:/Users/Administrator/deepseek-balance-statusline/index.ts",
+    "padding": 0
+  },
+
+  "autoUpdatesChannel": "latest",
+  "theme": "dark"
+}

@@ -1,0 +1,27 @@
+{
+  "name": "deepseek-balance-statusline",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "Real-time DeepSeek balance statusline for Claude Code",
+  "main": "index.ts",
+  "files": [
+    "index.ts",
+    "utils/",
+    "commands/",
+    ".claude-plugin/"
+  ],
+  "scripts": {
+    "check": "biome check --write .",
+    "test:stdin": "echo '{\"model\":{\"display_name\":\"DeepSeek-V4-Flash\"},\"context_window\":{\"current_usage\":{\"input_tokens\":45000},\"context_window_size\":200000}}' | node index.ts"
+  },
+  "keywords": [
+    "claude-code",
+    "deepseek",
+    "balance",
+    "statusline"
+  ],
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.8",
+    "@types/node": "^25.9.1"
+  }
+}
