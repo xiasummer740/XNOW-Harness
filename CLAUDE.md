@@ -28,6 +28,11 @@ xnow help           # 帮助
 - 查凭证也一样，先确认再看
 - 新项目首次存凭证时，自动追加到 `MAPPING.md` 和 README 索引
 
+## 自动更新
+
+- **每次会话开始时，自动拉取 XNOW-Harness 最新代码**：`git -C F:/summer/vs-code/XNOW-Harness pull`
+- 确保当前电脑始终使用最新版本的工具箱
+
 ## 说明
 
 XNOW-Harness 是 Claude Code 辅助工具箱，所有代码改完后自动同步到 GitHub。
