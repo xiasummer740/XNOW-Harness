@@ -1,12 +1,21 @@
 """XNOW-Harness — 配合 Claude Code 的辅助工具箱"""
 
 import sys
+import io
 import argparse
 from .utils.display import show_info, show_error
 from . import commands
 
 
+def _ensure_stdout():
+    """确保 stdout 能正确处理中文字符（兼容 Windows GBK 终端）"""
+    if sys.stdout.encoding and sys.stdout.encoding.lower() in ("gbk", "gb2312", "cp936"):
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+
+
 def main():
+    _ensure_stdout()
+
     parser = argparse.ArgumentParser(
         description="XNOW-Harness — Claude Code 辅助工具箱",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -30,12 +39,11 @@ def main():
         return
 
     if args.command == "balance":
-        import sys
         from .utils.balance import get_usage_summary, format_full_status
         b = get_usage_summary()
         if b:
             text = format_full_status(b)
-            sys.stdout.buffer.write((text + "\n").encode("utf-8"))
+            sys.stdout.write(text + "\n")
         else:
             show_error("余额查询失败（检查 API Key）")
         return

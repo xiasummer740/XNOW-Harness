@@ -121,14 +121,17 @@ def cmd_status(args: list[str]) -> bool:
     show_info(f"项目: {project_name}")
 
     # gh release 检查
-    release = subprocess.run(
-        ["gh", "release", "list", "--limit", "1"],
-        capture_output=True, text=True
-    )
-    if release.returncode == 0 and release.stdout.strip():
-        show_ok("GitHub Release: 存在")
-    else:
-        show_info("GitHub Release: 暂无")
+    try:
+        release = subprocess.run(
+            ["gh", "release", "list", "--limit", "1"],
+            capture_output=True, text=True
+        )
+        if release.returncode == 0 and release.stdout.strip():
+            show_ok("GitHub Release: 存在")
+        else:
+            show_info("GitHub Release: 暂无")
+    except FileNotFoundError:
+        show_info("GitHub Release: 跳过（未安装 gh CLI）")
 
     return True
 
@@ -177,11 +180,17 @@ __pycache__/
 
     # 检查 GitHub 是否已有同名仓库
     show_step("检查 GitHub 上是否存在同名仓库...")
-    existing = subprocess.run(
-        ["gh", "repo", "list", GITHUB_USER, "--json", "name", "--jq",
-         f'.[] | select(.name == "{project_name}").name'],
-        capture_output=True, text=True
-    ).stdout.strip()
+    existing = ""
+    try:
+        result = subprocess.run(
+            ["gh", "repo", "list", GITHUB_USER, "--json", "name", "--jq",
+             f'.[] | select(.name == "{project_name}").name'],
+            capture_output=True, text=True
+        )
+        existing = result.stdout.strip()
+    except FileNotFoundError:
+        show_warn("gh CLI 未安装，请先安装 GitHub CLI")
+        return True
 
     if existing:
         show_warn(f"GitHub 上已存在同名仓库, 执行更新...")
@@ -247,19 +256,23 @@ def cmd_release(args: list[str]) -> bool:
     notes_file.write_text(notes, encoding="utf-8")
 
     # gh release create
-    result = subprocess.run(
-        ["gh", "release", "create", tag, "--title", tag, "--notes-file", str(notes_file)],
-        capture_output=True, text=True,
-    )
+    result = None
+    try:
+        result = subprocess.run(
+            ["gh", "release", "create", tag, "--title", tag, "--notes-file", str(notes_file)],
+            capture_output=True, text=True,
+        )
+    except FileNotFoundError:
+        show_warn("gh CLI 未安装，跳过 Release 创建")
 
     if notes_file.exists():
         notes_file.unlink()
 
-    if result.returncode == 0:
+    if result and result.returncode == 0:
         project = Path.cwd().name
         show_ok(f"Release 已发布: https://github.com/{GITHUB_USER}/{project}/releases/tag/{tag}")
     else:
-        show_error(f"Release 创建失败: {result.stderr[:200]}")
+        show_error(f"Release 创建失败: {result.stderr[:200] if result else 'gh CLI 未安装'}")
 
     return True
 

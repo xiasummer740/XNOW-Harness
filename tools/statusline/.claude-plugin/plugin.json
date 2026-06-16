@@ -1,0 +1,13 @@
+{
+  "name": "deepseek-balance-statusline",
+  "description": "Display DeepSeek account balance in Claude Code status line when the active model is DeepSeek",
+  "version": "1.0.1",
+  "author": {
+    "name": "legend80s"
+  },
+  "commands": ["./commands/setup.md"],
+  "homepage": "https://github.com/legend80s/deepseek-balance-statusline",
+  "repository": "https://github.com/legend80s/deepseek-balance-statusline",
+  "license": "MIT",
+  "keywords": ["deepseek", "balance", "statusline", "claude-code"]
+}
