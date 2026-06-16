@@ -26,6 +26,7 @@ def handle_command(cmd: str, args: list[str]) -> Optional[bool]:
         "init": cmd_init,
         "release": cmd_release,
         "tag": cmd_release,
+        "workflow": cmd_workflow,
         "help": cmd_help,
     }
 
@@ -277,6 +278,93 @@ def cmd_release(args: list[str]) -> bool:
     return True
 
 
+def cmd_workflow(args: list[str]) -> bool:
+    """xnow workflow — 查看工作流状态和指南"""
+    show_step("XNOW 高手工作流")
+
+    console.print("""
+[bold cyan]一、当前状态[/bold cyan]""")
+
+    # Git 信息
+    is_repo = subprocess.run(
+        ["git", "rev-parse", "--is-inside-work-tree"],
+        capture_output=True
+    ).returncode == 0
+
+    if is_repo:
+        branch = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            capture_output=True, text=True
+        ).stdout.strip()
+
+        dirty = subprocess.run(
+            ["git", "status", "--porcelain"],
+            capture_output=True, text=True
+        ).stdout.strip()
+
+        tag = subprocess.run(
+            ["git", "tag", "--sort=-creatordate", "--list"],
+            capture_output=True, text=True
+        ).stdout.strip().split("\n")[0] if is_repo else ""
+
+        console.print(f"  📂 分支: [bold]{branch}[/bold]")
+        if tag:
+            console.print(f"  🏷️  最新 tag: [bold]{tag}[/bold]")
+        if dirty:
+            file_count = len(dirty.split("\n"))
+            console.print(f"  ✏️  未提交: [yellow]{file_count}[/yellow] 个文件（记得 sync）")
+        else:
+            console.print(f"  ✅ 工作区: [green]干净[/green]")
+    else:
+        console.print("  ⚠️  未检测到 Git 仓库")
+
+    # 项目 CLAUDE.md
+    has_project_claude = False
+    for p in [".claude/PROJECT_SUMMARY.md", "CLAUDE.md"]:
+        if Path(p).exists():
+            has_project_claude = True
+            break
+
+    if has_project_claude:
+        console.print(f"  📋 项目文档: [green]存在[/green] ✓")
+    else:
+        console.print(f"  📋 项目文档: [yellow]未检测到[/yellow] — 建议创建 CLAUDE.md")
+
+    console.print("""
+[bold cyan]二、建议的下一步[/bold cyan]""")
+
+    if dirty:
+        console.print("  → [bold yellow]先提交当前改动[/bold yellow]: xnow sync \"提交信息\"")
+    elif has_project_claude:
+        console.print("  → [bold green]一切就绪[/bold green]，可以开新对话继续开发")
+    else:
+        console.print("  → [bold]创建项目 CLAUDE.md[/bold]，方便新对话秒懂项目")
+
+    console.print("""
+[bold cyan]三、工作流速查[/bold cyan]
+
+  [bold]日常开发[/bold]
+    Claude Code 写代码 → [bold]xnow sync[/bold] → 开新对话继续
+
+  [bold]什么时候开新对话？[/bold]
+    • 当前功能点做完了 ✅
+    • 聊了 15~20 轮了
+    • AI 开始"忘记"前面的内容
+
+  [bold]详细指南[/bold]
+    → 见 docs/expert-workflow.md
+
+  [bold]可用命令[/bold]
+    xnow sync \"msg\"     提交 + 推送
+    xnow status           项目状态
+    xnow init             初始化项目
+    xnow release patch    发布版本
+    xnow balance          查 DeepSeek 余额
+    xnow workflow         本指南
+""")
+    return True
+
+
 def cmd_help(args: list[str]) -> bool:
     """显示帮助"""
     console.print("""
@@ -286,6 +374,7 @@ def cmd_help(args: list[str]) -> bool:
 [bold]/status[/bold]               查看项目 git / 版本状态
 [bold]/init[/bold]                 初始化项目 → GitHub 仓库
 [bold]/release <type>[/bold]       发布版本 (patch/minor/major)
+[bold]/workflow[/bold]             查看工作流状态和指南
 [bold]/help[/bold]                 显示此帮助
 """)
     return True
