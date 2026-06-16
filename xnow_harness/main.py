@@ -17,6 +17,7 @@ def main():
   xnow status                    查看项目状态
   xnow init                      初始化 GitHub 仓库
   xnow balance                   查看 DeepSeek 余额
+  xnow workflow                  工作流状态和指南
         """,
     )
     parser.add_argument("command", nargs="?", default="help",
