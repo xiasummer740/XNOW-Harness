@@ -1,0 +1,5 @@
+{
+  "test": "pytest 2>&1",
+  "start": "xnow --help",
+  "build": "pip install -e ."
+}
