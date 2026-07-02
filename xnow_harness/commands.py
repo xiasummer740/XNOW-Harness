@@ -642,6 +642,16 @@ def cmd_release(args: list[str]) -> bool:
         Path("package.json").write_text(content, encoding="utf-8")
         show_ok(f"package.json 版本更新: {new_version}")
 
+    # 前端重构建（如果有 client 子项目）
+    client_pkg = Path("client") / "package.json"
+    if client_pkg.exists():
+        show_step("重建前端（确保版本号同步到构建产物）...")
+        result = subprocess.run(["npm", "run", "build"], capture_output=True, text=True, timeout=120, cwd="client")
+        if result.returncode == 0:
+            show_ok("前端重建完成")
+        else:
+            show_warn(f"前端重建失败: {result.stderr[:100]}，建议手动重建")
+
     # 提交版本变更
     subprocess.run(["git", "add", "-A"], capture_output=True)
     subprocess.run(["git", "commit", "-m", f"chore: bump version to {tag}"], capture_output=True)
