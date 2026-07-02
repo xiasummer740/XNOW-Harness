@@ -646,7 +646,7 @@ def cmd_release(args: list[str]) -> bool:
     client_pkg = Path("client") / "package.json"
     if client_pkg.exists():
         show_step("重建前端（确保版本号同步到构建产物）...")
-        result = subprocess.run(["npm", "run", "build"], capture_output=True, text=True, timeout=120, cwd="client")
+        result = subprocess.run("npm run build", shell=True, capture_output=True, text=True, timeout=120, cwd="client")
         if result.returncode == 0:
             show_ok("前端重建完成")
         else:
