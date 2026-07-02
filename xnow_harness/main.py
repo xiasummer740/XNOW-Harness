@@ -22,9 +22,13 @@ def main():
         epilog="""
 示例:
   xnow sync "feat: 添加登录"     提交代码并推送
+  xnow verify                    运行 .claude/tasks.json 验证流程
+  xnow sync-env                  同步配置到 xiangge-env 并推送
+  xnow deploy                    部署前置检查
   xnow release patch             发布小版本
   xnow status                    查看项目状态
   xnow init                      初始化 GitHub 仓库
+  xnow migrate up                数据库迁移
   xnow balance                   查看 DeepSeek 余额
   xnow workflow                  工作流状态和指南
         """,
